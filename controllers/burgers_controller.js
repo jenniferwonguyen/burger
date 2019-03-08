@@ -18,7 +18,8 @@ router.get("/", function (req, res) {
 
 //add new burger to db
 router.post("/api/burgers", function (req, res) {
-    burger.insertOne(["burger_name," "devour"], [req.body.burger_name, req.body.devour], function (result) {
+    console.log("what we save", req.body)
+    burger.insertOne(["burger_name", "devoured"], [req.body.name, 0], function (result) {
        //send back new burger id
        res.json({ id: result.insertId });
     });
@@ -30,6 +31,8 @@ router.put("/api/burgers/:id", function(req, res) {
     console.log("condition", condition);
 
     burger.updateOne({ devoured: req.body.devour }, condition, function(result){
+        console.log("about to send to front end", result )
+        res.json(result)
        if (result.changedRows === 0) {
            return res.status(404).end();
        } else {
